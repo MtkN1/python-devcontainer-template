@@ -1,0 +1,49 @@
+{
+    "name": "${localWorkspaceFolderBasename}",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "GitHub.vscode-pull-request-github",
+                "be5invis.toml",
+                "eamodio.gitlens",
+                "ms-python.flake8"
+            ],
+            "settings": {
+                "editor.rulers": [
+                    88
+                ],
+                "files.exclude": {
+                    "**/.venv": true
+                },
+                "[python]": {
+                    "editor.codeActionsOnSave": {
+                        "source.organizeImports": true
+                    },
+                    "editor.formatOnSave": true
+                },
+                "isort.args": [
+                    "--profile=black"
+                ],
+                "python.defaultInterpreterPath": "${containerWorkspaceFolder}/.venv",
+                "python.formatting.provider": "black",
+                "python.interpreter.infoVisibility": "always",
+                "python.linting.flake8Args": [
+                    "--max-line-length=88",
+                    "--extend-ignore=E203"
+                ],
+                "python.linting.flake8Enabled": true,
+                "python.testing.pytestArgs": [
+                    "-s"
+                ],
+                "python.testing.pytestEnabled": true,
+                "python.testing.unittestEnabled": false
+            }
+        }
+    },
+    "postCreateCommand": "${containerWorkspaceFolder}/.devcontainer/postCreateCommand.sh",
+    "waitFor": "postCreateCommand",
+    "build": {
+        "dockerfile": "../Dockerfile",
+        "target": "devcontainer"
+    }
+}
