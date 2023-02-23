@@ -10,9 +10,7 @@ RUN rm -f /etc/apt/apt.conf.d/docker-clean; echo 'Binary::apt::APT::Keep-Downloa
 RUN --mount=type=cache,target=/var/cache/apt,sharing=locked \
     --mount=type=cache,target=/var/lib/apt,sharing=locked \
     apt-get update && apt-get install -y --no-install-recommends \
-    bash-completion \
-    golang-github-pelletier-go-toml \
-    jq
+    bash-completion
 
 # Install Poetry for development
 RUN --mount=type=cache,target=/root/.cache \
@@ -51,10 +49,10 @@ RUN --mount=type=bind,from=builder,source=/usr/src/app/requirements.txt,target=r
 
 # Install main package
 RUN --mount=type=bind,from=builder,source=/usr/src/app/dist,target=dist \
-    pip install --no-cache-dir --no-index -f dist ${PYPROJECT_PACKAGE_NAME}
+    pip install --no-cache-dir --no-index -f dist main
 
 RUN adduser -u 5678 --disabled-password --gecos "" appuser
 USER appuser
 
 # Run module
-ENTRYPOINT ["python", "-m", "${PYPROJECT_MODULE_NAME}"]
+ENTRYPOINT ["python", "-m", "main"]
