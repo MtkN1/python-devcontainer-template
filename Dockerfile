@@ -29,7 +29,7 @@ WORKDIR /usr/src/app
 RUN --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
     --mount=type=bind,source=poetry.lock,target=poetry.lock \
     poetry export -o requirements.txt --without-hashes \
-    && pip wheel -w wheelhouse -r requirements.txt
+    && pip wheel -w wheels -r requirements.txt
 
 # Build main package
 RUN --mount=type=bind,source=pyproject.toml,target=pyproject.toml \
@@ -44,8 +44,8 @@ WORKDIR /usr/src/app
 
 # Install dependencies
 RUN --mount=type=bind,from=builder,source=/usr/src/app/requirements.txt,target=requirements.txt \
-    --mount=type=bind,from=builder,source=/usr/src/app/wheelhouse,target=wheelhouse \
-    pip install --no-cache-dir --no-index -f wheelhouse -r requirements.txt
+    --mount=type=bind,from=builder,source=/usr/src/app/wheels,target=wheels \
+    pip install --no-cache-dir --no-index -f wheels -r requirements.txt
 
 # Install main package
 RUN --mount=type=bind,from=builder,source=/usr/src/app/dist,target=dist \
